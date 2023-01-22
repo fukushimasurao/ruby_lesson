@@ -319,3 +319,126 @@ menus.each do |menu|
   index += 1
 end
 ```
+
+### クラス3 継承
+
+`class Hoge < Fuga`で継承を表す
+
+```ruby
+class Drink < Menu
+    # 継承先のインスタンス変数
+    attr_accessor :amount
+end
+```
+
+### クラス4 オーバーライド(メソッド)
+
+```ruby
+class Menu
+  attr_accessor :name
+  attr_accessor :price
+
+  def initialize(name:, price:)
+    self.name = name
+    self.price = price
+  end
+  
+  def info
+    return "#{self.name} #{self.price}円"
+  end
+  
+  def get_total_price(count)
+    total_price = self.price * count
+    if count >= 3
+      total_price -= 100
+    end
+    return total_price
+  end
+end
+
+class Food < Menu
+  attr_accessor :calorie
+  
+  # infoメソッドのオーバーライド。親要素と同じメソッド名なので、こちらが優先される。
+  def info
+    return "#{self.name} #{self.price}円 (#{self.calorie}kcal)"
+    # return "#{self.name} #{self.price}円"
+  end
+  
+  def calorie_info
+    return "#{self.name}は#{self.calorie}kcalです"
+  end
+end
+```
+
+### クラス5 オーバーライド(initializeメソッド)
+
+`super`で親クラスのinitialメソッドを呼び出せる。
+
+```ruby
+class Menu
+  attr_accessor :name
+  attr_accessor :price
+
+  def initialize(name:, price:)
+    self.name = name
+    self.price = price
+  end
+  
+  def info
+    return "#{self.name} #{self.price}円"
+  end
+  
+  def get_total_price(count)
+    total_price = self.price * count
+    if count >= 3
+      total_price -= 100
+    end
+    return total_price
+  end
+end
+
+class Food < Menu
+  attr_accessor :calorie
+  
+  def initialize(name:, price:, calorie:)
+    # superを使って書き換えてください
+    super(name: name, price:price)
+  end
+  
+  def info
+    return "#{self.name} #{self.price}円 (#{self.calorie}kcal)"
+  end
+  
+  def calorie_info
+    return "#{self.name}は#{self.calorie}kcalです"
+  end
+end
+
+```
+
+### クラス6 既存のクラスを呼び出す
+
+`Date`クラスを利用する。
+
+```ruby
+# 呼び出すときは、./ いらない。
+require "date"
+
+# 変数todayに、Date.todayの戻り値代入。
+# Dateクラスのメソッドは他にもたくさんあり。
+today = Date.today
+
+# 変数todayをputsしてください
+puts today
+
+# 変数todayに対してsunday?
+# これは、日曜日ならTrue, 違ったらFalseを返す。
+puts today.sunday?
+
+```
+
+### 不明点
+
+- インスタンスメソッドと、クラスメソッドの違いは？
+  - インスタンスメソッドはインスタンス化して呼び出す。クラスメソッドはインスタンスしなくても呼び出すことができる？
